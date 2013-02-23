@@ -2,6 +2,7 @@ package com.example.aquaplantx;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 
 import android.view.Menu;
 import android.view.View;
@@ -14,7 +15,9 @@ import android.widget.TextView;
 public class GetTime extends Activity {
 	public static BT mybt;
 	public static TextView myLabel;
-	public static TextView timeLabel; 
+	public static TextView timeLabel;
+	
+	int BLUETOOTH_REQUEST = 1;
 	
     @Override
     
@@ -51,6 +54,23 @@ public class GetTime extends Activity {
 //			}
 //		});
         
+    }
+    
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    	if (requestCode == 1) {
+
+    	     if(resultCode == RESULT_OK){
+    	    	myLabel.setText(mybt.openBT());
+
+    	}
+
+    	if (resultCode == RESULT_CANCELED) {
+
+    	     myLabel.setText("Please Enable BLuetooth");
+
+    		}
+    	}//onAcrivityResult
     }
     
 

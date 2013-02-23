@@ -13,6 +13,7 @@ public class BTDevice {
 	String btDeviceName;
 	BluetoothAdapter mBluetoothAdapter;
 	BluetoothDevice mmDevice;
+	int BLUETOOTH_REQUEST = 1;
 	
 	public BTDevice(String string, Activity c) {
 		btDeviceName = string;
@@ -29,9 +30,10 @@ public class BTDevice {
         }
         
         if(!mBluetoothAdapter.isEnabled())
-        {
+        {	
             Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            context.startActivityForResult(enableBluetooth);
+            context.startActivityForResult(enableBluetooth,BLUETOOTH_REQUEST);
+            return false;
             
         }
         

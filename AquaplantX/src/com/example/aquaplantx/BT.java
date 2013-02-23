@@ -41,7 +41,7 @@ public class BT{
         mmOutputStream = mmSocket.getOutputStream();
         mmInputStream = mmSocket.getInputStream();
         }catch (Exception e) {
-			return "No Device in range:" + e;
+			return "No Device in range!";
 		}
     	}else{
     		return "No Bluetooth Adapter Found";

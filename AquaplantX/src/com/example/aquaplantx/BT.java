@@ -9,6 +9,7 @@ import java.util.UUID;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
+import android.os.Handler;
 import android.text.format.DateFormat;
 
 public class BT{
@@ -21,6 +22,12 @@ public class BT{
     BluetoothSocket mmSocket;
     OutputStream mmOutputStream;
     InputStream mmInputStream;
+    Thread workerThread;
+    Thread sendworkerThread;
+    byte[] readBuffer;
+    int readBufferPosition;
+    boolean opened;
+    volatile boolean stopWorker;
    
 	
 	public InputStream getMmInputStream() {
@@ -28,6 +35,7 @@ public class BT{
 	}
 
 	public BT(String string, Activity c) {
+		opened = false;
 		context = c;
 		bTDevice = new BTDevice(string,c);
 	}
@@ -47,13 +55,12 @@ public class BT{
     		return "No Bluetooth Adapter Found";
     	}
         
-        
+        opened = true;
         return "Bluetooth Opened";
     }
     
     String closeBT()
     {   
-    	FetchTimeData.stopWorker = true;
     	try{
         mmOutputStream.close();
         mmInputStream.close();
@@ -61,9 +68,66 @@ public class BT{
     	}catch (Exception e) {
 			return "Already closed or not connected:" + e;
 		}
-        
+        opened = false;
         return "Bluetooth Disconnected";
     }
+    
+    void read(){
+    	final Handler handler = new Handler(); 
+        final byte delimiter = 10; //This is the ASCII code for a newline character
+        
+        stopWorker = false;
+        readBufferPosition = 0;
+        readBuffer = new byte[1024];
+        workerThread = new Thread(new Runnable()
+        {
+            public void run()
+            {                
+               while(!Thread.currentThread().isInterrupted() && !stopWorker)
+               {
+                    try 
+                    {
+                        int bytesAvailable = mmInputStream.available();                        
+                        if(bytesAvailable > 0)
+                        {
+                            byte[] packetBytes = new byte[bytesAvailable];
+                            mmInputStream.read(packetBytes);
+                            for(int i=0;i<bytesAvailable;i++)
+                            {
+                                byte b = packetBytes[i];
+                                if(b == delimiter)
+                                {
+                                    byte[] encodedBytes = new byte[readBufferPosition];
+                                    System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
+                                    final String data = new String(encodedBytes, "US-ASCII");
+                                    readBufferPosition = 0;
+                                    
+                                    handler.post(new Runnable()
+                                    {
+                                        public void run()
+                                        {
+                                            GetTime.timeLabel.setText(data);
+                                            //this goes for a dispatcher that is going to be created in the future to read all the commands.
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    readBuffer[readBufferPosition++] = b;
+                                }
+                            }
+                        }
+                    } 
+                    catch (IOException ex) 
+                    {
+                        stopWorker = true;
+                    }
+               }
+            }
+        });
+
+        workerThread.start();
+	}
     
     
     
@@ -89,5 +153,14 @@ public class BT{
     			} catch (IOException e) {
     				e.printStackTrace();
     			}
+    }
+    
+    void stopWorker(){
+    	stopWorker = true;
+    	
+    }
+    
+    boolean isOpened(){
+    	return opened;
     }
 }

@@ -25,14 +25,15 @@ public class GetTime extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_time);
         
-        Work[] values = new Work[] { new GetArduinoTime(),new OBT(),new CloseBT()};
+        Work[] values = new Work[] { new GetArduinoTime(), new SetArduinoTime(),new OBT(),new CloseBT()};
         
         ArrayAdapter<Work> adapter = new ArrayAdapter<Work>(this, android.R.layout.simple_list_item_1, values);
         
         ListView listView = (ListView)findViewById(R.id.listView1);
         listView.setAdapter(adapter);
         
-        //Button settings = (Button)findViewById(R.id.menu_settings);
+       // Button setTimeButton = (Button)findViewById(R.id.menu_settings);
+        
         myLabel = (TextView)findViewById(R.id.textView1);
         timeLabel = (TextView)findViewById(R.id.textView2);
         mybt = new BT("FireFly-2B1A", this);
@@ -45,12 +46,12 @@ public class GetTime extends Activity {
         	  }
         });
         
-//        setTimeButton.setOnClickListener(new View.OnClickListener()
+//		setTimeButton.setOnClickListener(new View.OnClickListener()
 //        {
 //			
 //			@Override
 //			public void onClick(View v) {
-//				setTime();
+//				mybt.setTime();
 //			}
 //		});
         

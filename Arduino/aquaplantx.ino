@@ -19,6 +19,8 @@
 // *********************************************
 #include <Wire.h>                       // For some strange reasons, Wire.h must be included here
 #include <DS1307new.h>
+#include <MsTimer2.h>
+#include <EEPROM.h>
  
 // *********************************************
 // DEFINE
@@ -35,6 +37,9 @@ int prog1hour = 0;
 int prog1minute = 0;
 String inputString = "";         // a string to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
+int addr = 0;
+int myProgramTimes[8];
+
 // *********************************************
 // SETUP
 // *********************************************
@@ -105,6 +110,28 @@ void setup()
   Serial.print("MEZ=0, MESZ=1 : ");
   Serial.println(MESZ, DEC);    
   Serial.println();
+  
+  if ( 4 != EEPROM.read(addr)){
+    EEPROM.write(addr, 4);
+    for(int i = 0; i<8; i++){
+      myProgramTimes[i] = -1;
+      addr++;
+      EEPROM.write(addr, myProgramTimes[i]);
+      i++;
+      myProgramTimes[i] = -1;
+      addr++;
+      EEPROM.write(addr, myProgramTimes[i]);
+    }
+  }else{
+      addr++;
+      for(int i = 0; i<8; i++){
+      myProgramTimes[i] = EEPROM.read(addr);
+      addr++;
+      i++;
+      myProgramTimes[i] = EEPROM.read(addr);
+      addr++;
+    }
+    }
 }
  
 // *********************************************
@@ -150,6 +177,23 @@ void serialEvent() {
         stringComplete = true;
       } 
     }
+ }
+ 
+ void rotinaRega(){
+     int myHour;
+     int myMinute;
+     RTC.getTime();
+      for(int i=0; i<8; i++){
+        if (myHour==myProgramTimes[i] && myMinute==myProgramTimes[++i]){
+          regaPrograma(i);
+        }
+     }
+ 
+ 
+ }
+ 
+ void regaPrograma(int num){
+   num = num/2;
  }
 
 void wTime(){              //what time is it?

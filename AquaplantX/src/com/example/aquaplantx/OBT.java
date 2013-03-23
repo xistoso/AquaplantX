@@ -5,6 +5,7 @@ public class OBT implements Work{
 		GetTime.myLabel.setText(GetTime.mybt.openBT());
 		if(GetTime.mybt.isOpened()){
 			GetTime.mybt.read();
+			GetTime.mymenu.setMenu(2);
 		}
 	}
 	

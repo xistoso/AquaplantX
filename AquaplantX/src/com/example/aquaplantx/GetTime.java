@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 public class GetTime extends Activity {
 	public static BT mybt;
+	public static Menu mymenu;
 	public static TextView myLabel;
 	public static TextView timeLabel;
+	public static ArrayAdapter<Work> adapter;
 	
 	int BLUETOOTH_REQUEST = 1;
 	
@@ -25,9 +27,9 @@ public class GetTime extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_time);
         
-        Work[] values = new Work[] { new GetArduinoTime(), new SetArduinoTime(),new OBT(),new CloseBT()};
+        Work[] values = new Work[] { new OBT()};
         
-        ArrayAdapter<Work> adapter = new ArrayAdapter<Work>(this, android.R.layout.simple_list_item_1, values);
+        adapter = new ArrayAdapter<Work>(this, android.R.layout.simple_list_item_1, values);
         
         ListView listView = (ListView)findViewById(R.id.listView1);
         listView.setAdapter(adapter);
@@ -37,6 +39,7 @@ public class GetTime extends Activity {
         myLabel = (TextView)findViewById(R.id.textView1);
         timeLabel = (TextView)findViewById(R.id.textView2);
         mybt = new BT("FireFly-2B1A", this);
+        mymenu = new Menu();
         
         listView.setOnItemClickListener(new OnItemClickListener() {
         	  @Override

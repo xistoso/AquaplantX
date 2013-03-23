@@ -1,5 +1,8 @@
 package com.example.aquaplantx;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -14,7 +17,7 @@ import android.widget.TextView;
 
 public class GetTime extends Activity {
 	public static BT mybt;
-	public static Menu mymenu;
+	public static ListaMenu mymenu;
 	public static TextView myLabel;
 	public static TextView timeLabel;
 	public static ArrayAdapter<Work> adapter;
@@ -29,7 +32,10 @@ public class GetTime extends Activity {
         
         Work[] values = new Work[] { new OBT()};
         
-        adapter = new ArrayAdapter<Work>(this, android.R.layout.simple_list_item_1, values);
+        ArrayList<Work> lst = new ArrayList<Work>();
+        lst.addAll(Arrays.asList(values));
+        
+        adapter = new ArrayAdapter<Work>(this, android.R.layout.simple_list_item_1, lst);
         
         ListView listView = (ListView)findViewById(R.id.listView1);
         listView.setAdapter(adapter);
@@ -39,7 +45,7 @@ public class GetTime extends Activity {
         myLabel = (TextView)findViewById(R.id.textView1);
         timeLabel = (TextView)findViewById(R.id.textView2);
         mybt = new BT("FireFly-2B1A", this);
-        mymenu = new Menu();
+        mymenu = new ListaMenu();
         
         listView.setOnItemClickListener(new OnItemClickListener() {
         	  @Override

@@ -62,6 +62,7 @@ public class BT{
     String closeBT()
     {   
     	try{
+    	stopWorker = true; //maybe too soon to stop
         mmOutputStream.close();
         mmInputStream.close();
         mmSocket.close();

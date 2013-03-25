@@ -4,7 +4,7 @@ import android.os.CountDownTimer;
 
 public class GetArduinoTime implements Work{
 	public void work(){
-    	new CountDownTimer(10000, 800){
+    	new CountDownTimer(2400, 800){
     		public void onTick(long millisUntilFinished) {
     			String msg = "GT";
     			msg += "\n"; 

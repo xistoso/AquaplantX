@@ -1,8 +1,14 @@
 package com.example.aquaplantx;
 
 public class Back implements Work {
+	
+	int num;
+	
+	public Back(int n){
+		num = n;
+	}
 	public void work(){
-		GetTime.mymenu.setMenu(2);
+		GetTime.mymenu.setMenu(num);
 	}
 	
 	@Override

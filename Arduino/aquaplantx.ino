@@ -33,12 +33,18 @@ uint16_t startAddr = 0x0000;            // Start address to store in the NV-RAM
 uint16_t lastAddr;                      // new address for storing in NV-RAM
 uint16_t TimeIsSet = 0xaa55;            // Helper that time must not set again
 int incomingByte = 0;
+int pnum;
 int prog1hour = 0;
 int prog1minute = 0;
 String inputString = "";         // a string to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
+boolean pump = false;
 int addr = 0;
 int myProgramTimes[8];
+int myPumpTimes[16];
+unsigned long myPumpMillis[4];
+int currentPumpTime[4];
+boolean schedule[4];
 
 // *********************************************
 // SETUP
@@ -47,8 +53,19 @@ void setup()
 {
   pinMode(2, INPUT);                    // Test of the SQW pin, D2 = INPUT
   pinMode(13, OUTPUT);                  // Led as Output
+  pinMode(5, OUTPUT);                   // The Pumps
+  pinMode(6, OUTPUT);
+  pinMode(7, OUTPUT);
+  pinMode(8, OUTPUT);
+  
+  digitalWrite(5, HIGH);
+  digitalWrite(6, HIGH);
+  digitalWrite(7, HIGH);
+  digitalWrite(8, HIGH);
+  
   digitalWrite(2, HIGH);                // Test of the SQW pin, D2 = Pullup on
   digitalWrite(13, LOW);                // Set Onboard LeD off
+
  
   Serial.begin(57600);
   
@@ -132,6 +149,9 @@ void setup()
       addr++;
     }
     }
+    for(int i=0; i<4 ; i++){
+      schedule[i] = false;
+    }
 }
  
 // *********************************************
@@ -143,8 +163,7 @@ void loop()
         // clear the string:
         if(inputString.length() > 2 && inputString[0]=='G' && inputString[1]=='T'){
           wTime();
-        }else{
-        if(inputString.length() >= 7 && inputString[0]=='S' && inputString[1]=='C'){
+        }else if(inputString.length() >= 7 && inputString[0]=='S' && inputString[1]=='C'){
           prog1hour = ((inputString[2] - '0') * 10) + (inputString[3] - '0');
           prog1minute = ((inputString[4] - '0') * 10) + (inputString[5] - '0');
           RTC.stopClock();
@@ -156,14 +175,33 @@ void loop()
           TimeIsSet = 0xaa55;
           RTC.setRAM(54, (uint8_t *)&TimeIsSet, sizeof(uint16_t));
           RTC.startClock();
-          };
-        };
+          }else if(inputString.length() >= 8 && inputString[0]=='P' && inputString[2]=='B' && inputString[4]=='T'){
+            pnum = (inputString[1]*4)+inputString[3];         
+            myPumpTimes[pnum] = inputString[5];
+        }else if(inputString.length() >= 8 && inputString[0]=='P' && inputString[2]=='A' ){
+          pnum = inputString[1];
+          pnum=pnum*2;
+          myProgramTimes[pnum]= inputString[3]*10+inputString[4];
+          pnum++;
+          myProgramTimes[pnum]= inputString[5]*10+inputString[6];  
+        }
         inputString = "";
         stringComplete = false;
       }
-        
-      delay(850);                          // wait a second
-    }
+   rotinaRega();
+   if (pump){
+      bombas();
+   }else{
+     for(int i=0; i<4 ; i++){
+      if(schedule[i] == true){
+        schedule[i] = false;
+        regaPrograma(i);
+        break;
+      }
+     }
+   }  
+   delay(100);
+ }
 
 void serialEvent() {
     while (Serial.available()) {
@@ -185,16 +223,44 @@ void serialEvent() {
      RTC.getTime();
       for(int i=0; i<8; i++){
         if (myHour==myProgramTimes[i] && myMinute==myProgramTimes[++i]){
-          regaPrograma(i);
+          if(pump){
+            schedule[i/2] = true;  
+            }else{
+              regaPrograma(i);
+            }
         }
      }
- 
- 
  }
  
  void regaPrograma(int num){
+   int aux;
    num = num/2;
+   num = num * 4;
+   for(int i=0; i<4 ; i++){ 
+     aux = myPumpTimes[num+i];
+     if(aux > 0 && aux < 240){
+       currentPumpTime[i]=aux*1000;
+       myPumpMillis[i]=millis();
+       digitalWrite(i+4, LOW);
+       pump=true;  
+     }else{
+       myPumpMillis[i]=-1;
+     }
+   }
  }
+ 
+void bombas(){
+      for(int i=0; i<4 ; i++){
+      unsigned long aux = myPumpMillis[i];
+      if(aux > 0){
+        if(currentPumpTime[i] < (millis() - aux)){
+          digitalWrite(i+4, HIGH);
+          return;
+        }
+      }
+    }
+    pump=false;
+}
 
 void wTime(){              //what time is it?
     RTC.getTime();

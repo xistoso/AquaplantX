@@ -8,6 +8,7 @@ public class Programa implements Work{
 	
 	public void work(){
 		GetTime.myLabel.setText("Programa" + num);
+		GetTime.programa = num;
 		GetTime.mymenu.setMenu(4);
 	}
 	

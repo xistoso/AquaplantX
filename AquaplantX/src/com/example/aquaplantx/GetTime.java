@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -22,8 +23,10 @@ public class GetTime extends Activity {
 	public static TextView myLabel;
 	public static TextView timeLabel;
 	public static TimePicker myTimePicker;
+	public static NumberPicker myNumberPicker;
 	public static ArrayAdapter<Work> adapter;
 	public static int programa;
+	public static int bomba;
 	
 	int BLUETOOTH_REQUEST = 1;
 	
@@ -50,6 +53,8 @@ public class GetTime extends Activity {
         myTimePicker = (TimePicker)findViewById(R.id.timePicker1);
         myTimePicker.setVisibility(8);
         myTimePicker.setIs24HourView(true);
+        myNumberPicker = (NumberPicker)findViewById(R.id.numberPicker1);
+        myNumberPicker.setVisibility(8); 
         mybt = new BT("FireFly-2B1A", this);
         mymenu = new ListaMenu();
         

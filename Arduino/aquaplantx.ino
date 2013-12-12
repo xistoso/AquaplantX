@@ -221,6 +221,8 @@ void serialEvent() {
      int myHour;
      int myMinute;
      RTC.getTime();
+     myHour = RTC.hour;
+     myMinute = RTC.minute;
       for(int i=0; i<8; i++){
         if (myHour==myProgramTimes[i] && myMinute==myProgramTimes[++i]){
           if(pump){

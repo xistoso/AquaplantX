@@ -35,6 +35,7 @@ public class ListaMenu {
     	case 4:
     	{
     		GetTime.myTimePicker.setVisibility(8);
+       		GetTime.timeLabel.setText(null);
     		GetTime.adapter.clear();
     		GetTime.adapter.add(new SetProgramTime());
     		GetTime.adapter.add(new SetPumpTimes());
@@ -45,13 +46,27 @@ public class ListaMenu {
     	{
     		GetTime.myTimePicker.setVisibility(0);
     		GetTime.adapter.clear();
+    		GetTime.adapter.add(new Confirm(4, new SendProgramTime()));
     		GetTime.adapter.add(new Back(4));
     		break;
     	}
     	case 6:
     	{
+    		GetTime.myTimePicker.setVisibility(8);
+    		GetTime.timeLabel.setText(null);
+    		GetTime.adapter.clear();
+    		GetTime.adapter.add(new Pump(1));
+    		GetTime.adapter.add(new Pump(2));
+    		GetTime.adapter.add(new Pump(3));
+    		GetTime.adapter.add(new Pump(4));
+    		GetTime.adapter.add(new Back(4));
+    		break;
+    	}
+    	case 7:
+    	{
     		GetTime.myTimePicker.setVisibility(0);
     		GetTime.adapter.clear();
+    		GetTime.adapter.add(new Confirm(4, new SendProgramTime()));
     		GetTime.adapter.add(new Back(4));
     		break;
     	}

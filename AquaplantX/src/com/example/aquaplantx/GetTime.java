@@ -23,7 +23,7 @@ public class GetTime extends Activity {
 	public static TextView timeLabel;
 	public static TimePicker myTimePicker;
 	public static ArrayAdapter<Work> adapter;
-	public static int Programa;
+	public static int programa;
 	
 	int BLUETOOTH_REQUEST = 1;
 	

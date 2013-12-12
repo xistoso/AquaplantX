@@ -150,6 +150,7 @@ public class BT{
     void sendData(String msg)
     { 
     			try {
+    				msg += "\n";
     				mmOutputStream.write(msg.getBytes());
     			} catch (IOException e) {
     				e.printStackTrace();

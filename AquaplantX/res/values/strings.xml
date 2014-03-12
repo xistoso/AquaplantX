@@ -8,5 +8,7 @@
     <string name="bt_disconnect">Desligar</string>
     <string name="bt_connect">Ligar</string>
     <string name="set_time">Acertar Hora e Data</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
 
 </resources>

@@ -62,14 +62,6 @@ public class ListaMenu {
     		GetTime.adapter.add(new Back(4));
     		break;
     	}
-    	case 7:
-    	{
-    		GetTime.myTimePicker.setVisibility(0);
-    		GetTime.adapter.clear();
-    		GetTime.adapter.add(new Confirm(4, new SendProgramTime()));
-    		GetTime.adapter.add(new Back(4));
-    		break;
-    	}
     	
     	}
     	

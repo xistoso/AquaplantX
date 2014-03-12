@@ -1,8 +1,9 @@
 package com.example.aquaplantx;
 
 public class SetArduinoTime implements Work{
-	public void work(){
+	public int work(){
     	GetTime.mybt.setTime();
+    	return 0;
 	}
 	public String toString(){
 		return "Acerta Hora";

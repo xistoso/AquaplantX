@@ -6,10 +6,11 @@ public class Programa implements Work{
 		num=n;
 	}
 	
-	public void work(){
+	public int work(){
 		GetTime.myLabel.setText("Programa" + num);
 		GetTime.programa = num;
 		GetTime.mymenu.setMenu(4);
+		return 0;
 	}
 	
 	

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 
 import android.view.Menu;
 import android.view.View;
@@ -16,8 +17,10 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class GetTime extends Activity {
+	public static final int PUMP_RESULT = 0;
 	public static BT mybt;
 	public static ListaMenu mymenu;
 	public static TextView myLabel;
@@ -27,6 +30,8 @@ public class GetTime extends Activity {
 	public static ArrayAdapter<Work> adapter;
 	public static int programa;
 	public static int bomba;
+	protected Intent intent;
+	
 	
 	int BLUETOOTH_REQUEST = 1;
 	
@@ -46,6 +51,7 @@ public class GetTime extends Activity {
         ListView listView = (ListView)findViewById(R.id.listView1);
         listView.setAdapter(adapter);
         
+        
        // Button setTimeButton = (Button)findViewById(R.id.menu_settings);
         
         myLabel = (TextView)findViewById(R.id.textView1);
@@ -62,10 +68,11 @@ public class GetTime extends Activity {
         	  @Override
         	  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         		  Work w = (Work)parent.getItemAtPosition(position);
-        		  w.work();
+        		  if(w.work()==7) startActivityForResult(intent, PUMP_RESULT);
         	  }
         });
         
+        intent = new Intent(this, GetPumpTime.class);
 //		setTimeButton.setOnClickListener(new View.OnClickListener()
 //        {
 //			
@@ -76,6 +83,7 @@ public class GetTime extends Activity {
 //		});
         
     }
+    
     
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -94,6 +102,18 @@ public class GetTime extends Activity {
     	}//onAcrivityResult
     }
     
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -101,5 +121,7 @@ public class GetTime extends Activity {
         getMenuInflater().inflate(R.menu.activity_get_time, menu);
         return true;
     }
+    
+    
     
 }

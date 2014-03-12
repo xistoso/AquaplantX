@@ -1,5 +1,5 @@
 package com.example.aquaplantx;
 
 public interface Work {
-	public void work();
+	public int work();
 }

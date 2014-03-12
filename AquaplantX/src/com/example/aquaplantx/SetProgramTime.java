@@ -1,8 +1,9 @@
 package com.example.aquaplantx;
 
 public class SetProgramTime implements Work{
-	public void work(){
+	public int work(){
 		GetTime.mymenu.setMenu(5);
+		return 0;
 	}
 	
 	public String toString(){

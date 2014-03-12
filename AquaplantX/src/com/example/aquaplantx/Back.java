@@ -7,8 +7,9 @@ public class Back implements Work {
 	public Back(int n){
 		num = n;
 	}
-	public void work(){
+	public int work(){
 		GetTime.mymenu.setMenu(num);
+		return 0;
 	}
 	
 	@Override

@@ -10,9 +10,10 @@ public class Confirm implements Work {
 		num = n;
 		p=proc;
 	}
-	public void work(){
+	public int work(){
 		p.process();
 		GetTime.mymenu.setMenu(num);
+		return 0;
 	}
 	
 	@Override

@@ -1,37 +1,27 @@
 package com.example.aquaplantx;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class GetTime extends Activity {
-	public static final int PUMP_RESULT = 0;
 	public static BT mybt;
-	public static ListaMenu mymenu;
 	public static TextView myLabel;
 	public static TextView timeLabel;
 	public static TimePicker myTimePicker;
 	public static NumberPicker myNumberPicker;
-	public static ArrayAdapter<Work> adapter;
-	public static int programa;
 	public static int bomba;
+	public BluetoothDispatcher bd;
 	protected Intent intent;
-	
 	
 	int BLUETOOTH_REQUEST = 1;
 	
@@ -41,66 +31,59 @@ public class GetTime extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_time);
         
-        Work[] values = new Work[] { new OBT()};
+        Button connectButton = (Button)findViewById(R.id.connectButton);
+        Button debugButton = (Button)findViewById(R.id.debugButton);
         
-        ArrayList<Work> lst = new ArrayList<Work>();
-        lst.addAll(Arrays.asList(values));
-        
-        adapter = new ArrayAdapter<Work>(this, android.R.layout.simple_list_item_1, lst);
-        
-        ListView listView = (ListView)findViewById(R.id.listView1);
-        listView.setAdapter(adapter);
-        
-        
-       // Button setTimeButton = (Button)findViewById(R.id.menu_settings);
+        bd = new BluetoothDispatcher();
         
         myLabel = (TextView)findViewById(R.id.textView1);
-        timeLabel = (TextView)findViewById(R.id.textView2);
-        myTimePicker = (TimePicker)findViewById(R.id.timePicker1);
-        myTimePicker.setVisibility(8);
-        myTimePicker.setIs24HourView(true);
-        myNumberPicker = (NumberPicker)findViewById(R.id.numberPicker1);
-        myNumberPicker.setVisibility(8); 
         mybt = new BT("FireFly-2B1A", this);
-        mymenu = new ListaMenu();
         
-        listView.setOnItemClickListener(new OnItemClickListener() {
-        	  @Override
-        	  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        		  Work w = (Work)parent.getItemAtPosition(position);
-        		  if(w.work()==7) startActivityForResult(intent, PUMP_RESULT);
-        	  }
-        });
-        
-        intent = new Intent(this, GetPumpTime.class);
-//		setTimeButton.setOnClickListener(new View.OnClickListener()
-//        {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				mybt.setTime();
-//			}
-//		});
+        intent = new Intent(this, Menu2Program.class);
+		connectButton.setOnClickListener(new View.OnClickListener()
+        {
+			
+			@Override
+			public void onClick(View v) {
+				myLabel.setText(mybt.openBT());
+				if(mybt.isOpened()){
+					mybt.read(bd);
+					startActivity(intent);
+					overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+				}
+				
+			}
+		});
+		
+		debugButton.setOnClickListener(new View.OnClickListener()
+        {
+			
+			@Override
+			public void onClick(View v) {
+					startActivity(intent);
+					overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+			}
+				
+		});
         
     }
     
     
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-    	if (requestCode == 1) {
+    	if (requestCode == BLUETOOTH_REQUEST) {
 
     	     if(resultCode == RESULT_OK){
     	    	myLabel.setText(mybt.openBT());
-    	    	mymenu.setMenu(2);
+    	     }
+
+    	     if (resultCode == RESULT_CANCELED) {
+
+    	    	 myLabel.setText("Please Enable BLuetooth");
+
+    	     }
     	}
-
-    	if (resultCode == RESULT_CANCELED) {
-
-    	     myLabel.setText("Please Enable BLuetooth");
-
-    		}
-    	}//onAcrivityResult
-    }
+}//onAcrivityResult
     
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

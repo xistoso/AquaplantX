@@ -10,5 +10,28 @@
     <string name="set_time">Acertar Hora e Data</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
+    <string name="back">Voltar</string>
+    <string name="dosage_pump">Dosagem e Bombas</string>
+    <string name="define_program_time">Definir Hora de Arranque</string>
+    <string name="menu_clock">Relógio</string>
+    <string name="program1">Programa 1</string>
+    <string name="program2">Programa 2</string>
+    <string name="program3">Programa 3</string>
+    <string name="program4">Programa 4</string>
+    <string name="disconectBT">Desconnectar Bluetooth</string>
+    <string name="connectBT">Connectar Bluetooth</string>
+    
+    
+    
+    
+    
+    <string name="pump_prompt">Escolhe uma Bomba</string>
+ 
+    <string-array name="pump_arrays">
+        <item>Bomba 1</item>
+        <item>Bomba 2</item>
+        <item>Bomba 3</item>
+        <item>Bomba 4</item>
+    </string-array>
 
 </resources>

@@ -73,7 +73,8 @@ public class BT{
         return "Bluetooth Disconnected";
     }
     
-    void read(){
+    void read(final BluetoothDispatcher bd){
+    	//final BluetoothDispatcher bd = new BluetoothDispatcher();
     	final Handler handler = new Handler(); 
         final byte delimiter = 10; //This is the ASCII code for a newline character
         
@@ -107,7 +108,7 @@ public class BT{
                                     {
                                         public void run()
                                         {
-                                            GetTime.timeLabel.setText(data);
+                                        	bd.process(data);
                                             //this goes for a dispatcher that is going to be created in the future to read all the commands.
                                         }
                                     });

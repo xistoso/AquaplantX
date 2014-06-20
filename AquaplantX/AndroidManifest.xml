@@ -25,7 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.example.aquaplantx.Menu2Program" />
+        <activity android:name="com.example.aquaplantx.Menu3Program" />
         <activity android:name="com.example.aquaplantx.GetPumpTime" />
+        <activity android:name="com.example.aquaplantx.GetProgramTime" />
+        <activity android:name="com.example.aquaplantx.GetArduinoClock" />
     </application>
     
 
